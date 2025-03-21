@@ -12,6 +12,7 @@
   "dependencies": {
     "@particle-network/authkit": "^2.0.19",
     "@particle-network/connectkit": "^2.0.15",
+    "@particle-network/thresh-sig": "^0.7.8",
     "@particle-network/wallet": "^2.0.8",
     "@solana/web3.js": "^1.98.0",
     "@unocss/preset-wind": "66.1.0-beta.6",

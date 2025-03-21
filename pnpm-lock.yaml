@@ -14,6 +14,9 @@ importers:
       '@particle-network/connectkit':
         specifier: ^2.0.15
         version: 2.0.15(@emotion/is-prop-valid@1.2.2)(@particle-network/wallet@2.0.8(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@types/react@19.0.12)(bufferutil@4.0.9)(prop-types@15.8.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.23.12(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10))
+      '@particle-network/thresh-sig':
+        specifier: ^0.7.8
+        version: 0.7.8
       '@particle-network/wallet':
         specifier: ^2.0.8
         version: 2.0.8(bufferutil@4.0.9)(utf-8-validate@5.0.10)

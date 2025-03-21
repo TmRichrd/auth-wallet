@@ -6,6 +6,7 @@ import {
   useWallets,
   useDisconnect,
   useModal,
+  SolanaChain,
 } from '@particle-network/connectkit'
 import useCommonStore from '../store/common'
 import { useEffect } from 'react'
@@ -50,13 +51,16 @@ const Home = (props: any) => {
               let signature = ''
               if (chain == 'sol') {
                 const encodedMessage = new TextEncoder().encode(msg)
-                const data = await window.solana?.signMessage(
-                  encodedMessage,
-                  'utf8'
-                )
-                const signatureBase64 = uint8ArrayToBase64(data.signature)
-                signature = signatureBase64
-                console.log(signature, 'signature')
+                const solanaWallet = primaryWallet.getWalletClient<SolanaChain>();
+                const data = await solanaWallet?.signMessage(encodedMessage)
+                signature= uint8ArrayToBase64(data.signature)
+                // const data = await window.solana?.signMessage(
+                //   encodedMessage,
+                //   'utf8'
+                // )
+                // const signatureBase64 = uint8ArrayToBase64(data.signature)
+                // signature = signatureBase64
+                // console.log(signature, 'signature')
               } else {
                 signature = await walletClient.signMessage({
                   message: msg,
