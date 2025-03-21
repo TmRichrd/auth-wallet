@@ -1,5 +1,5 @@
 'use client'
-
+import { Bounce, ToastContainer, toast } from 'react-toastify'
 import {
   ConnectButton,
   useAccount,
@@ -14,70 +14,81 @@ import { login } from '../api'
 import emitter from '../utils/eventBus'
 
 const Home = (props: any) => {
-  const { address, isConnected, chainId } = useAccount()
+  const { address, isConnected } = useAccount()
   const { label, refcode, invite_code, state } = useCommonStore()
   const [primaryWallet] = useWallets()
   const { disconnect } = useDisconnect()
   const { setOpen } = useModal()
+  const uint8ArrayToBase64 = (uint8Array: Uint8Array): string => {
+    return btoa(String.fromCharCode(...uint8Array))
+  }
   emitter.on('logout', () => {
     disconnect()
   })
   emitter.on('open', () => {
     setOpen(true)
   })
+  const errorMsg = (msg: any) => {
+    toast(msg)
+  }
   useEffect(() => {
+    console.log(primaryWallet, 'primaryWallet')
+    console.log(address, 'address')
     const signUserMessage = async () => {
-      if (isConnected && address && state?.token ==='') {
+      if (isConnected && address && state?.token === '') {
         emitter.emit('setAddress', address)
         try {
           const timestamp = Date.now()
           const msg = `Welcome: ${address}\nTimestamp: ${timestamp}`
-          console.log(primaryWallet.connector)
           const walletClient = primaryWallet?.getWalletClient()
-          console.log(walletClient, 'walletClient')
-          const signature = await walletClient.signMessage({
-            message: msg,
-            account: address,
-          })
-          const chain =
-            primaryWallet?.connector.chainType == 'solana'
-              ? 'sol'
-              : primaryWallet?.connector.chainType
-          console.log('签名成功:', signature)
-          // 构建登录请求参数
-          let params: loginProps = {
-            msg: msg,
-            sign: signature,
-            timestamp: timestamp,
-            address: address || '',
-            refer: refcode || '',
-            chain,
-            invite_code: invite_code || '',
+          if (walletClient) {
+            try {
+              const chain =
+                primaryWallet?.connector.chainType == 'solana'
+                  ? 'sol'
+                  : primaryWallet?.connector.chainType
+              let signature = ''
+              if (chain == 'sol') {
+                const encodedMessage = new TextEncoder().encode(msg)
+                const data = await window.solana?.signMessage(
+                  encodedMessage,
+                  'utf8'
+                )
+                const signatureBase64 = uint8ArrayToBase64(data.signature)
+                signature = signatureBase64
+                console.log(signature, 'signature')
+              } else {
+                signature = await walletClient.signMessage({
+                  message: msg,
+                  account: address,
+                })
+              }
+              // 构建登录请求参数
+              let params: loginProps = {
+                msg: msg,
+                sign: signature,
+                timestamp: timestamp,
+                address: address || '',
+                refer: refcode || '',
+                chain,
+                invite_code: invite_code || '',
+              }
+              const res = await login(params)
+              if (res.code == 0) {
+                emitter.emit('login', res.data)
+                useCommonStore.setState({ state: res.data })
+              } else {
+                errorMsg(res.message)
+              }
+            } catch (error) {
+              console.log(error, '1')
+            }
           }
-          // const res = await login(params)
-          const res: {
-            code: number
-            data: userInfoProps
-          } = {
-            code: 0,
-            data: {
-              token:
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMUpQNzY3WUYwRThXUkJLQzhBQ1cxRjQxUyIsImxvYyI6Img1IiwiZXhwIjoxNzQxODUxODA0fQ.zontrwTSB0j2f807vqtUtFAit3Ah9D9PTM0G_b5wsI0',
-              user_id: '01JP767YF0E8WRBKC8ACW1F41S',
-              invite_code: '6174708',
-              invite_link: 'https://news.dorylus.chat/6174708',
-              parent_user_id: '',
-              avatar:
-                'https://thirdwx.qlogo.cn/mmopen/vi_32/Z85K2bFgtGuKqGKzYZQXu4ZwFIIbPY2c04tmhwe9f1wFlUEavwW9DsMCl5cQofnA5LP0icqKtIcicmg1wf2GaDR9guwztpc3ib0AjnUeZ9YqFg/132',
-              is_agent: false,
-              name: '古垣丶',
-              // exp: 1741851804,
-            },
-          }
-          emitter.emit('login', res.data)
-          useCommonStore.setState({ state: res.data })
         } catch (error) {
-          console.error('签名失败:', error)
+          console.log(error)
+          disconnect()
+          emitter.emit('disconnect')
+          errorMsg(error)
         }
       }
     }
@@ -85,15 +96,31 @@ const Home = (props: any) => {
   }, [address, isConnected, primaryWallet])
 
   useEffect(() => {
-    if(!isConnected){
-      // TODO:: 通知主应用退出登录
+    if (!isConnected) {
+      emitter.emit('disconnect')
     }
   }, [isConnected])
   return (
-    <div onClick={() => setOpen(true)}>
-      <button className="login-btn">{label || ''}</button>
+    <div>
+      {/* {contextHolder} */}
+      <button onClick={() => setOpen(true)} className="login-btn">
+        {label || ''}
+      </button>
       {/* <ConnectButton label={label} /> */}
       {/* <div onClick={signUserMessage}>签名</div> */}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Bounce}
+      />
     </div>
   )
 }

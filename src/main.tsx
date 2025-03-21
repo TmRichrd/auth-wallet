@@ -10,9 +10,9 @@ import {
   QiankunProps,
 } from 'vite-plugin-qiankun/dist/helper'
 import useCommonStore from './store/common.ts'
-import { Buffer } from 'buffer';
 import emitter from './utils/eventBus.ts'
 import { userInfoProps } from './api/types.ts'
+import { Buffer } from 'buffer';
 window.Buffer = Buffer;
 let root: ReactDOM.Root | null = null
 
@@ -49,6 +49,9 @@ const initQianKun = () => {
       }, true)
       emitter.on('login', (data:userInfoProps) => {
         props.sendMessage(data)
+      });
+      emitter.on('disconnect', () => {
+        props.disconnect()
       });
       emitter.on('setAddress', (data:string) => {
         props.sendAddress(data)

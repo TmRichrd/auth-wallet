@@ -6,6 +6,7 @@ type Events = {
   setAddress:string;
   logout:any;
   open:any;
+  disconnect:any
 };
 
 const emitter = mitt<Events>();
