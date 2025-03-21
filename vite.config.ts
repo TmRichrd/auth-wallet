@@ -6,6 +6,7 @@ import qiankun from "vite-plugin-qiankun";
 export default defineConfig(({ mode }) => {
   const isDev = mode === 'development'
   return {
+    base:'https://auth.dorylus.chat',
     plugins: [
     // second 要和主应用注册子应用时的名称一样（registerMicroApps的name属性）
       qiankun("second", {
@@ -27,7 +28,7 @@ export default defineConfig(({ mode }) => {
       },
       host: "0.0.0.0", // ip
       port: 7002,
-      origin: "http://localhost:7002",
+      // origin: "http://localhost:7002",
       proxy: {
         '/apis': {
           target: "https://app.dorylus.chat/",
