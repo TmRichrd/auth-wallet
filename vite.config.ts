@@ -26,7 +26,7 @@ const particleWasmPlugin: Plugin | undefined = {
 export default defineConfig(({ mode }) => {
   const isDev = mode === 'development'
   return {
-    base: 'https://auth.dorylus.chat',
+    base: 'https://auth.agiopen.network',
     plugins: [
       // second 要和主应用注册子应用时的名称一样（registerMicroApps的name属性）
       qiankun('second', {
