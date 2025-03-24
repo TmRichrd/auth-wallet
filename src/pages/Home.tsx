@@ -13,6 +13,7 @@ import { useEffect } from 'react'
 import { loginProps, userInfoProps } from '../api/types'
 import { login } from '../api'
 import emitter from '../utils/eventBus'
+import User from "../assets/user.svg"
 
 const Home = (props: any) => {
   const { address, isConnected } = useAccount()
@@ -107,8 +108,9 @@ const Home = (props: any) => {
   return (
     <div>
       {/* {contextHolder} */}
-      <button onClick={() => setOpen(true)} className="login-btn">
-        {label || ''}
+      <button onClick={() => setOpen(true)} className="wh-10 rounded bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center cursor-pointer">
+        {/* {label || ''} */}
+        <img src={User} className='wh-6'/>
       </button>
       {/* <ConnectButton label={label} /> */}
       {/* <div onClick={signUserMessage}>签名</div> */}
