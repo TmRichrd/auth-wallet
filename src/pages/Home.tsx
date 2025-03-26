@@ -55,13 +55,6 @@ const Home = (props: any) => {
                 const solanaWallet = primaryWallet.getWalletClient<SolanaChain>();
                 const data = await solanaWallet?.signMessage(encodedMessage)
                 signature= uint8ArrayToBase64(data.signature)
-                // const data = await window.solana?.signMessage(
-                //   encodedMessage,
-                //   'utf8'
-                // )
-                // const signatureBase64 = uint8ArrayToBase64(data.signature)
-                // signature = signatureBase64
-                // console.log(signature, 'signature')
               } else {
                 signature = await walletClient.signMessage({
                   message: msg,
