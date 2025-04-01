@@ -46,7 +46,7 @@ const config = createConfig({
     }),
     
   ],
-  chains: [solana, mainnet, bsc],
+  chains: [bsc, solana, mainnet, base, arbitrum, avalanche, linea, bsc, optimism, polygon, arbitrumNova],
 });
 
 // Wrap your application with this component.
