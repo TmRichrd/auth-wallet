@@ -11,7 +11,7 @@ import {
 import useCommonStore from '../store/common'
 import { useEffect } from 'react'
 import { loginProps, userInfoProps } from '../api/types'
-import { login } from '../api'
+import { login,login_csdn } from '../api'
 import emitter from '../utils/eventBus'
 import User from "../assets/user.svg"
 
@@ -33,6 +33,17 @@ const Home = (props: any) => {
   const errorMsg = (msg: any) => {
     toast(msg)
   }
+  function mockEvmSignature(message: string): string {
+    const fixedPart = "4e1cb74e5b127d4f3a72e4b5a3a8e1d2f3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2";
+    const recoveryId = Math.random() > 0.5 ? "1b" : "1c";
+    return `0x${fixedPart.slice(0, 128)}${recoveryId}`;
+  }
+  function mockSolanaSignature(message: string): string {
+    const randomBytes = Array.from({length: 64}, () => 
+      Math.floor(Math.random() * 256).toString(16).padStart(2, '0')
+    ).join('');
+    return `simulated_${randomBytes.slice(0, 32)}...${randomBytes.slice(-8)}`;
+  }
   useEffect(() => {
     console.log(primaryWallet, 'primaryWallet')
     console.log(address, 'address')
@@ -51,15 +62,17 @@ const Home = (props: any) => {
                   : primaryWallet?.connector.chainType
               let signature = ''
               if (chain == 'sol') {
-                const encodedMessage = new TextEncoder().encode(msg)
-                const solanaWallet = primaryWallet.getWalletClient<SolanaChain>();
-                const data = await solanaWallet?.signMessage(encodedMessage)
-                signature= uint8ArrayToBase64(data.signature)
+                signature = mockSolanaSignature(msg)
+                // const encodedMessage = new TextEncoder().encode(msg)
+                // const solanaWallet = primaryWallet.getWalletClient<SolanaChain>();
+                // const data = await solanaWallet?.signMessage(encodedMessage)
+                // signature= uint8ArrayToBase64(data.signature)
               } else {
-                signature = await walletClient.signMessage({
-                  message: msg,
-                  account: address,
-                })
+                signature = mockEvmSignature(msg)
+                // signature = await walletClient.signMessage({
+                //   message: msg,
+                //   account: address,
+                // })
               }
               // 构建登录请求参数
               let params: loginProps = {
@@ -71,7 +84,7 @@ const Home = (props: any) => {
                 chain,
                 invite_code: invite_code || '',
               }
-              const res = await login(params)
+              const res = await login_csdn(params)
               if (res.code == 0) {
                 emitter.emit('login', res.data)
                 useCommonStore.setState({ state: res.data })
