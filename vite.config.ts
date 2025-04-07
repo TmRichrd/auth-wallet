@@ -25,8 +25,9 @@ const particleWasmPlugin: Plugin | undefined = {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const isDev = mode === 'development'
+  console.log(process.env.NEXT_PUBLIC_VERCEL_URL,'process.env.NEXT_PUBLIC_VERCEL_URL')
   return {
-    base: 'https://auth.agiopen.network',
+    base: process.env.NEXT_PUBLIC_VERCEL_URL,
     plugins: [
       // second 要和主应用注册子应用时的名称一样（registerMicroApps的name属性）
       qiankun('second', {
