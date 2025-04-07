@@ -25,9 +25,8 @@ const particleWasmPlugin: Plugin | undefined = {
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const isDev = mode === 'development'
-  console.log(process.env.NEXT_PUBLIC_VERCEL_URL,'process.env.NEXT_PUBLIC_VERCEL_URL')
   return {
-    base: process.env.NEXT_PUBLIC_VERCEL_URL,
+    base: "https://auth-wallet-seven.vercel.app/",
     plugins: [
       // second 要和主应用注册子应用时的名称一样（registerMicroApps的name属性）
       qiankun('second', {
