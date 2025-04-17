@@ -14,13 +14,23 @@ const routes: RouterType[] = [
     component: lazy(() => import('./pages/Home')),
   },
   {
-    path: '/blog',
-    name: 'Blog',
+    path: '/agent-list',
+    name: 'AgentList',
     component: lazy(() => import('./pages/Home')),
   },
   {
-    path: '/blogdetail',
-    name: 'BlogDetail',
+    path: '/launch',
+    name: 'Launch',
+    component: lazy(() => import('./pages/Home')),
+  },
+  {
+    path: '/token/:id',
+    name: 'Token',
+    component: lazy(() => import('./pages/Home')),
+  },
+  {
+    path: '/my-agents',
+    name: 'MyAgents',
     component: lazy(() => import('./pages/Home')),
 
   },

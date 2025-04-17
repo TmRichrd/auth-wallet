@@ -3,7 +3,7 @@ import { userInfoProps } from '../api/types';
 
 type Events = {
   login: userInfoProps;
-  setAddress:string;
+  setAddress:any;
   logout:any;
   open:any;
   disconnect:any

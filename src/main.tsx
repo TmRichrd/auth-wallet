@@ -36,13 +36,6 @@ const initQianKun = () => {
     mount(props) {
       useCommonStore.setState({ label: props.sharedData.label })
       props.onGlobalStateChange?.((state:any) => {
-        useCommonStore.setState({label:state.sharedData.label})
-        useCommonStore.setState({refcode:state.sharedData.refcode})
-        useCommonStore.setState({invite_code:state.sharedData.invite_code})
-        useCommonStore.setState({state:state.state})
-        if(state.isLoggedIn){
-          emitter.emit('logout')
-        }
         if(state.open){
           emitter.emit('open')
         }
