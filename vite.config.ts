@@ -1,7 +1,6 @@
 import { defineConfig, Plugin, ConfigEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'node:path'
-import qiankun from 'vite-plugin-qiankun'
 import fs from 'fs'
 import path from 'path'
 const particleWasmPlugin: Plugin | undefined = {
@@ -24,15 +23,10 @@ const particleWasmPlugin: Plugin | undefined = {
 }
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const isDev = mode === 'development'
   return {
-    base: 'https://authlaunch.agiopen.network',
+    // base: 'https://authlaunch.agiopen.network',
     plugins: [
-      // second 要和主应用注册子应用时的名称一样（registerMicroApps的name属性）
-      qiankun('second', {
-        useDevMode: true,
-      }),
-      !isDev && react(),
+      react(),
       particleWasmPlugin,
     ],
     define: {

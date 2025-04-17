@@ -1,67 +1,88 @@
 'use client'
-import { Bounce, ToastContainer, toast } from 'react-toastify'
+import { Bounce, ToastContainer } from 'react-toastify'
 import {
-  ConnectButton,
   useAccount,
   useWallets,
   useDisconnect,
   useModal,
-  SolanaChain,
 } from '@particle-network/connectkit'
-import useCommonStore from '../store/common'
-import { useEffect } from 'react'
-import { loginProps, userInfoProps } from '../api/types'
-import { login,login_csdn } from '../api'
+import { useEffect, useState } from 'react'
 import emitter from '../utils/eventBus'
-import User from "../assets/user.svg"
 import './Home.css'
 
 const Home = (props: any) => {
+  const [type, setType] = useState(0)
+  const [ethconnectAddress, setEthconnectAddress] = useState('')
   const { address, isConnected } = useAccount()
-  const { label, refcode, invite_code, state } = useCommonStore()
   const [primaryWallet] = useWallets()
   const { disconnect } = useDisconnect()
-  const { setOpen } = useModal()
-  const uint8ArrayToBase64 = (uint8Array: Uint8Array): string => {
-    return btoa(String.fromCharCode(...uint8Array))
-  }
+  const { setOpen, isOpen } = useModal()
+
   emitter.on('logout', () => {
     disconnect()
   })
   emitter.on('open', () => {
     setOpen(true)
   })
-  const handleGetProvider = async (primaryWallet:any) => {
+  const handleGetProvider = async (primaryWallet: any) => {
     const provider = await primaryWallet?.connector.getProvider()
-    emitter.emit('setAddress', {
-      info:{
-        icon:primaryWallet?.connector.icon,
-        name:primaryWallet?.connector.name,
-        rdns:primaryWallet?.connector.id,
-        uuid:primaryWallet?.connector.uid
+    window.microApp.dispatch({
+      info: {
+        icon: primaryWallet?.connector.icon,
+        name: primaryWallet?.connector.name,
+        rdns: primaryWallet?.connector.id,
+        uuid: primaryWallet?.connector.uid,
       },
-      provider:provider
+      provider: provider,
     })
-
+    setEthconnectAddress(primaryWallet?.accounts[0])
   }
 
   useEffect(() => {
     handleGetProvider(primaryWallet)
   }, [address, isConnected, primaryWallet])
+  useEffect(() => {
+    window.microApp?.addDataListener((data) => {
+      if (data.ethereum) {
+        console.log('收到 MetaMask 对象:', data.ethereum)
+        window.ethereum = data.ethereum
+      }
+    }, true)
+  }, [])
+  useEffect(() => {
+    const handler = (data: any) => {
+      if (data.type) {
+        setType(data.type);
+        setOpen(true);
+      }
+    };
+
+    window.microApp?.addGlobalDataListener(handler, true);
+
+    return () => {
+      window.microApp?.removeGlobalDataListener(handler);
+    };
+  }, []);
+
+  // 监听弹窗关闭
+  useEffect(() => {
+    if (!isOpen) { // 假设 useModal 也提供了 isOpen 状态
+      setType(0); // 重置 type
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isConnected) {
-      emitter.emit('disconnect')
+      console.log(222);
+      
+      window.microApp.dispatch({ disconnect: true })
     }
   }, [isConnected])
   return (
     <div>
-      {/* {contextHolder} */}
       <button onClick={() => setOpen(true)} className="home-button">
-        Connect
+        {ethconnectAddress ? ethconnectAddress : 'Connect'}
       </button>
-      {/* <ConnectButton label={label} /> */}
-      {/* <div onClick={signUserMessage}>签名</div> */}
       <ToastContainer
         position="top-center"
         autoClose={5000}

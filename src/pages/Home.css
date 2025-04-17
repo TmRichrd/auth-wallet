@@ -2,15 +2,28 @@
   background: #481696;
     color: #FFFFFF;
     border: none;
-    padding: 0.75rem 1.5rem;
+    padding: 12px 24px;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
     transition: all 0.3s ease;
-    max-width: 120px;
-    max-height: 48px;
     overflow: hidden;
+    font-size: 13px;
 }
 .home-button:hover{
   background-color: #8F85B8;
+}
+.sc-jRLeyu{
+  min-height: 100vh !important;
+}
+.sc-eagvWJ{
+  color: #fff;
+}
+.sc-kTgNvW{
+  padding: 0 10px;
+}
+.sc-jgmqJh{
+  > * + * {
+    margin-left: 4px;
+  }
 }

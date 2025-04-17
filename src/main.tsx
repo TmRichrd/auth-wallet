@@ -1,27 +1,17 @@
-// import './public-path';
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import '@unocss/reset/tailwind-compat.css'
-import {
-  renderWithQiankun,
-  qiankunWindow,
-  QiankunProps,
-} from 'vite-plugin-qiankun/dist/helper'
-import useCommonStore from './store/common.ts'
-import emitter from './utils/eventBus.ts'
-import { userInfoProps } from './api/types.ts'
 import { Buffer } from 'buffer';
-window.Buffer = Buffer;
-let root: ReactDOM.Root | null = null
+import microApp from '@micro-zoe/micro-app'
 
-function render(props: QiankunProps) {
-  const { container } = props
+window.Buffer = Buffer;
+microApp.start()
+
+function render() {
   const root = ReactDOM.createRoot(
-    (container
-      ? container.querySelector('#root')
-      : document.getElementById('root')) as HTMLElement
+    document.getElementById('root') as HTMLElement
   )
   root.render(
     <React.StrictMode>
@@ -31,38 +21,4 @@ function render(props: QiankunProps) {
   return root
 }
 
-const initQianKun = () => {
-  renderWithQiankun({
-    mount(props) {
-      useCommonStore.setState({ label: props.sharedData.label })
-      props.onGlobalStateChange?.((state:any) => {
-        if(state.open){
-          emitter.emit('open')
-        }
-      }, true)
-      emitter.on('login', (data:userInfoProps) => {
-        props.sendMessage(data)
-      });
-      emitter.on('disconnect', () => {
-        props.disconnect()
-      });
-      emitter.on('setAddress', (data:string) => {
-        props.sendAddress(data)
-      });
-      root = render(props)
-    },
-    bootstrap() {
-      console.log('bootstrap')
-    },
-    unmount(props) {
-      root?.unmount()
-    },
-    update(props) {},
-  })
-}
-
-if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
-  root = render({})
-} else {
-  initQianKun()
-}
+render()

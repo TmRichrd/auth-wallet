@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@micro-zoe/micro-app':
+        specifier: 1.0.0-rc.24
+        version: 1.0.0-rc.24
       '@particle-network/authkit':
         specifier: ^2.0.19
         version: 2.0.19(@particle-network/wallet@2.0.8(bufferutil@4.0.9)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(prop-types@15.8.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(utf-8-validate@5.0.10)(viem@2.23.12(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10))
@@ -793,6 +796,9 @@ packages:
   '@metamask/utils@9.3.0':
     resolution: {integrity: sha512-w8CVbdkDrVXFJbfBSlDfafDR6BAkpDmv1bC1UJVCoVny5tW2RKAdn9i68Xf7asYT4TnUhl/hN4zfUiKQq9II4g==}
     engines: {node: '>=16.0.0'}
+
+  '@micro-zoe/micro-app@1.0.0-rc.24':
+    resolution: {integrity: sha512-eM2s8bEzxQp+oea6X7KTZvnQ8F48frXV6tYDKj1E0tHPkUIX0vkHwpwHDtOLk4ufAI2c+yRy4ZzZHF7XTS6mZw==}
 
   '@motionone/animation@10.18.0':
     resolution: {integrity: sha512-9z2p5GFGCm0gBsZbi8rVMOAJCtw1WqBTIPw3ozk06gDvZInBPIsQcHgYogEJ4yuHJ+akuW8g1SEIOpTOvYs8hw==}
@@ -4851,6 +4857,8 @@ snapshots:
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
+
+  '@micro-zoe/micro-app@1.0.0-rc.24': {}
 
   '@motionone/animation@10.18.0':
     dependencies:

@@ -2,7 +2,6 @@ import { Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import routes, { RouterType } from './routers' // Import your route configuration
 import React from 'react'
-import { qiankunWindow } from 'vite-plugin-qiankun/dist/helper'
 import { ParticleConnectkit } from './components/connectkit'
 import { ParticleAuthkit } from "./components/AuthKit";
 function App() {
@@ -33,7 +32,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter
-        basename={qiankunWindow.__POWERED_BY_QIANKUN__ ? '/' : '/'}
+        basename={'/'}
       >
         <ParticleConnectkit>
           <Routes>
